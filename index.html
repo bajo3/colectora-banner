@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Generador Portada - Jesús Díaz Automotores Colectora</title>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <!-- ffmpeg.wasm (para exportar MP4 localmente, sin servidor)
+       Nota: usamos v0.11.x porque expone el API global `FFmpeg.createFFmpeg()` (compatible con este proyecto).
+       En v0.12+ el API cambió (FFmpeg class / exec / writeFile...). -->
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js" crossorigin="anonymous" async></script>
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>Generador de Banners <span>Jesús Díaz Automotores · Colectora</span></h1>
+      <p class="subtitle">Elegí una plantilla, subí las fotos, completá los datos, reencuadrá (arrastrar + rueda) y descargá el ZIP.</p>
+    </header>
+
+    <section class="card">
+      <h2>Datos del vehículo</h2>
+      <div class="grid">
+        <label>Modelo
+          <input id="model" type="text" placeholder="Fiat Idea Adventure" />
+        </label>
+        <label>Año
+          <input id="year" type="number" placeholder="2009" />
+        </label>
+        <label>Kilometraje
+          <input id="km" type="number" placeholder="165000" />
+        </label>
+        <label>Versión
+          <input id="version" type="text" placeholder="Adventure" />
+        </label>
+        <label>Caja
+          <input id="gearbox" type="text" placeholder="Manual" />
+        </label>
+        <label>Motor (opcional)
+          <input id="engine" type="text" placeholder="1.8" />
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Plantilla
+          <select id="templateSelect">
+            <option value="portada" selected>Portada 1:1</option>
+            <option value="historia">Historia 9:16 (3 fotos)</option>
+            <option value="video">Video MP4 9:16 (1 foto por slide)</option>
+          </select>
+        </label>
+
+        <label class="file">
+          <span>Seleccionar imágenes</span>
+          <input id="images" type="file" accept="image/*" multiple />
+        </label>
+
+        <label>Formato
+          <select id="exportFormat">
+            <option value="jpg" selected>JPG</option>
+            <option value="png">PNG</option>
+          </select>
+        </label>
+
+        <label id="jpgQualityWrap">Calidad JPG
+          <input id="jpgQuality" type="range" min="0.80" max="0.95" step="0.01" value="0.92" />
+        </label>
+
+        <label id="videoDurationWrap" style="display:none;">Duración por foto (s)
+          <input id="videoDuration" type="number" min="1" max="8" step="0.5" value="2.5" />
+        </label>
+
+        <label id="videoFpsWrap" style="display:none;">FPS
+          <select id="videoFps">
+            <option value="24">24</option>
+            <option value="30" selected>30</option>
+          </select>
+        </label>
+
+        <button id="generateBtn" class="primary" type="button">Generar</button>
+        <button id="downloadZipBtn" class="secondary" type="button" disabled>Descargar ZIP</button>
+        <button id="downloadVideoBtn" class="secondary" type="button" disabled>Descargar MP4</button>
+      </div>
+
+      <div class="status" id="statusText">Listo. Subí las fotos y tocá <strong>Generar</strong>.</div>
+    </section>
+
+    <section class="card">
+      <h2>Previews (reencuadre)</h2>
+      <p class="hint">Arrastrá sobre el preview para mover. Usá la rueda del mouse para zoom. En Historia, elegí qué foto reencuadrar (Main / Abajo Izq / Abajo Der).</p>
+      <div id="previews" class="previews"></div>
+    </section>
+
+    <footer class="footer">Todo corre local en tu navegador. Nada se sube a ningún servidor.</footer>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
